@@ -1,0 +1,14 @@
+# MySQL queries
+
+CREATE DATABASE employee_management;
+
+USE employee_management;
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    position VARCHAR(50),
+    department VARCHAR(50),
+    hire_date DATE
+);
