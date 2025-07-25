@@ -1,0 +1,92 @@
+# PYTHON CODE 
+
+import mysql.connector
+
+# Connect to the database
+def connect_to_db():
+    connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="YOUR_PASSWORD",
+        database="employee_management"
+    )
+    return connection
+
+def add_employee(first_name, last_name, position, department, hire_date):
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    query = "INSERT INTO employees (first_name, last_name, position, department, hire_date) VALUES (%s, %s, %s, %s, %s)"
+    values = (first_name, last_name, position, department, hire_date)
+    cursor.execute(query, values)
+    connection.commit()
+    print("Employee added successfully.")
+    cursor.close()
+    connection.close()
+
+def view_employees():
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM employees")
+    result = cursor.fetchall()
+    for row in result:
+        print(row)
+    cursor.close()
+    connection.close()
+
+def update_employee(employee_id, first_name=None, last_name=None, position=None, department=None):
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    
+    query = "UPDATE employees SET "
+    updates = []
+    values = []
+
+    if first_name:
+        updates.append("first_name = %s")
+        values.append(first_name)
+    if last_name:
+        updates.append("last_name = %s")
+        values.append(last_name)
+    if position:
+        updates.append("position = %s")
+        values.append(position)
+    if department:
+        updates.append("department = %s")
+        values.append(department)
+    
+    query += ", ".join(updates) + " WHERE employee_id = %s"
+    values.append(employee_id)
+    
+    cursor.execute(query, tuple(values))
+    connection.commit()
+    print("Employee updated successfully.")
+    cursor.close()
+    connection.close()
+
+def delete_employee(employee_id):
+    connection = connect_to_db()
+    cursor = connection.cursor()
+    query = "DELETE FROM employees WHERE employee_id = %s"
+    cursor.execute(query, (employee_id,))
+    connection.commit()
+    print("Employee deleted successfully.")
+    cursor.close()
+    connection.close()
+
+
+# add_employee('John', 'Doe', 'Developer', 'Engineering', '2020-05-15')
+# add_employee('Jane', 'Smith', 'Manager', 'Sales', '2018-11-22')
+# add_employee('Alice', 'Johnson', 'Designer', 'Marketing', '2019-07-30')
+# add_employee('Bob', 'Brown', 'Analyst', 'Finance', '2021-03-10')
+# add_employee('Emily', 'Davis', 'HR Specialist', 'Human Resources', '2017-04-18')
+# add_employee('Michael', 'Wilson', 'Data Scientist', 'Data Science', '2022-01-12')
+# add_employee('Sarah', 'Miller', 'Software Tester', 'Quality Assurance', '2020-08-25')
+
+#view_employees()
+
+#update_employee(50,'Rechel','will','Software Tester', 'Quality Assurance')
+
+# for i in range(40,45):
+#     delete_employee(i)
+
+#delete_employee(50)
